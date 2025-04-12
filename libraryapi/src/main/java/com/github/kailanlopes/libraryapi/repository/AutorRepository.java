@@ -1,4 +1,12 @@
 package com.github.kailanlopes.libraryapi.repository;
 
-public interface AutorRepository {
+import com.github.kailanlopes.libraryapi.model.Autor;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface AutorRepository extends JpaRepository<Autor, UUID>{
+
+
+    UUID id(UUID id);
 }

@@ -6,3 +6,7 @@ spring:
     username: postgres #nome do banco de dados
     password: postgres #senha do banco de dados
     driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

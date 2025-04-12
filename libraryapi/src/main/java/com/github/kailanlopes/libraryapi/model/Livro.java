@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -31,18 +32,10 @@ public class Livro {
     private GeneroLivro genero;
 
     @Column(name = "preco", precision = 18, scale = 2, nullable = false)
-    private Double preco;
+    private BigDecimal preco;
 
-    @ManyToOne() // relacao muitos pra um com autor
+    @ManyToOne(cascade = CascadeType.ALL) // relacao muitos pra um com autor
     @JoinColumn(name = "id_autor")//Mapeamento da coluna chave estrangeira
     private Autor autor;
 
-
-//    id UUID NOT NULL PRIMARY KEY,
-//    isbn VARCHAR(30) NOT NULL,
-//    titulo VARCHAR(100) NOT NULL,
-//    data_publicacao DATE NOT NULL,
-//    genero VARCHAR(30) NOT NULL,
-//    preco numeric(18,2) NOT NULL,
-//    id_autor UUID NOT NULL REFERENCES autor(id),
 }
