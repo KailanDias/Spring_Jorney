@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,12 +25,12 @@ class LivroRepositoryTest {
     @Test
     void salvarTest(){
         Livro livro = new Livro();
-        livro.setIsbn("9091-123");
-        livro.setPreco(BigDecimal.valueOf(100));
+        livro.setIsbn("999888");
+        livro.setPreco(BigDecimal.valueOf(199));
         livro.setGenero(GeneroLivro.FICCAO);
-        livro.setTitulo("UFO");
-        livro.setDatapublicacao(LocalDate.of(1980,02,02));
-        Autor autor = autorRepository.findById(UUID.fromString("d604bfa3-cafe-40b9-9a99-0941bfaaded6")).orElse(null);
+        livro.setTitulo("asaxs");
+        livro.setDatapublicacao(LocalDate.of(1980,2,2));
+        Autor autor = autorRepository.findById(UUID.fromString("1aa8d5cf-297e-4707-8108-a57edd718b05")).orElse(null);
         livro.setAutor(autor);
 
         livroRepository.save(livro);
@@ -46,9 +47,9 @@ class LivroRepositoryTest {
         livro.setDatapublicacao(LocalDate.of(1980,02,02));
 
         Autor autor = new Autor();
-        autor.setNome("Joao");
+        autor.setNome("Lucas");
         autor.setNacionalidade("Brasileiro");
-        autor.setDataNascimento(LocalDate.of(1955, 1,31));
+        autor.setDataNascimento(LocalDate.of(2000, 2,25));
 
 
         livro.setAutor(autor);
@@ -74,6 +75,30 @@ class LivroRepositoryTest {
         var id = UUID.fromString("60fce447-0e98-4451-956a-455b304a4eed");
         livroRepository.deleteById(id);
     }
+
+    @Test
+    void buscarlivroTest(){
+        UUID id = UUID.fromString("91a0d7f9-73ac-4f73-9345-d4ed5b513d2d"); //Passando o ID do livro que quero consultar
+        Livro livro = livroRepository.findById(id).orElse(null); // Pegando o livro
+        System.out.print("Livro: ");
+        System.out.println(livro.getTitulo());
+        System.out.print("Autor: ");//Pega o Titulo do livro
+        System.out.println(livro.getAutor().getNome()); // Pega o nome do Autor do livro
+    }
+
+    @Test
+    void pesquisaPorTituloTest(){
+        List<Livro> lista = livroRepository.findByTitulo("UFO");
+        lista.forEach(System.out::println);
+    }
+
+    @Test
+    void pesquisaPorISBNTest(){
+        List<Livro> lista = livroRepository.findByIsbn("9091-123");
+        lista.forEach(System.out::println);
+    }
+
+
 
 
 

@@ -2,6 +2,7 @@ package com.github.kailanlopes.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "livro")
 @Data //Annotation do lombok para criar os getters e setters, entre ourtas...
+@ToString(exclude = "autor")
 public class Livro {
 
     @Id
@@ -24,7 +26,7 @@ public class Livro {
     @Column(name = "titulo", nullable = false, length = 100)
     private String titulo;
 
-    @Column(name = "data_publicacao" , nullable = false)
+    @Column(name = "data_publicacao")
     private LocalDate datapublicacao;
 
     @Enumerated(EnumType.STRING) //Referencia a Classe Enum

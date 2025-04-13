@@ -30,8 +30,7 @@ public class Autor {
     @Column(name = "nacioanlidade")
     private  String nacionalidade;
 
-    //@OneToMany (mappedBy = "autor")//Mapeamento um autor para muitos livros
-    @Transient
+    @OneToMany (mappedBy = "autor", cascade = CascadeType.ALL) //Mapeamento um autor para muitos livros
     private List<Livro> livros; //lista de livros do autor
 
     @Deprecated
