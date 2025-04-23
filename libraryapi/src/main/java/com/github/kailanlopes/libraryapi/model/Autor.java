@@ -30,13 +30,9 @@ public class Autor {
     @Column(name = "nacioanlidade")
     private  String nacionalidade;
 
-    @OneToMany (mappedBy = "autor", cascade = CascadeType.ALL) //Mapeamento um autor para muitos livros
+    @OneToMany (mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //Mapeamento um autor para muitos livros
     private List<Livro> livros; //lista de livros do autor
 
-    @Deprecated
-    public Autor() {
-        //Para uso do framework
-    }
 
 
 }

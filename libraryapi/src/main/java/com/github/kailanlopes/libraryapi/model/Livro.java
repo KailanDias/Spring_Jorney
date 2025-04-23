@@ -15,6 +15,7 @@ import java.util.UUID;
 @ToString(exclude = "autor")
 public class Livro {
 
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,8 +37,9 @@ public class Livro {
     @Column(name = "preco", precision = 18, scale = 2, nullable = false)
     private BigDecimal preco;
 
-    @ManyToOne(cascade = CascadeType.ALL) // relacao muitos pra um com autor
+    @ManyToOne(fetch = FetchType.LAZY) // relacao muitos pra um com autor
     @JoinColumn(name = "id_autor")//Mapeamento da coluna chave estrangeira
     private Autor autor;
+
 
 }

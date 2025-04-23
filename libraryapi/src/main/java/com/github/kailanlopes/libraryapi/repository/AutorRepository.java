@@ -7,6 +7,4 @@ import java.util.UUID;
 
 public interface AutorRepository extends JpaRepository<Autor, UUID>{
 
-
-    UUID id(UUID id);
 }

@@ -6,6 +6,7 @@ import com.github.kailanlopes.libraryapi.model.Livro;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,14 +24,15 @@ class LivroRepositoryTest {
     private AutorRepository autorRepository;
 
     @Test
+    @Transactional
     void salvarTest(){
         Livro livro = new Livro();
-        livro.setIsbn("999888");
-        livro.setPreco(BigDecimal.valueOf(199));
-        livro.setGenero(GeneroLivro.FICCAO);
+        livro.setIsbn("14785239");
+        livro.setPreco(BigDecimal.valueOf(300));
+        livro.setGenero(GeneroLivro.MISTERIO);
         livro.setTitulo("asaxs");
         livro.setDatapublicacao(LocalDate.of(1980,2,2));
-        Autor autor = autorRepository.findById(UUID.fromString("1aa8d5cf-297e-4707-8108-a57edd718b05")).orElse(null);
+        Autor autor = autorRepository.findById(UUID.fromString("e32858e0-f610-4bf4-8530-e94801c0975c")).orElse(null);
         livro.setAutor(autor);
 
         livroRepository.save(livro);
@@ -42,13 +44,13 @@ class LivroRepositoryTest {
         Livro livro = new Livro();
         livro.setIsbn("9091-123");
         livro.setPreco(BigDecimal.valueOf(100));
-        livro.setGenero(GeneroLivro.FICCAO);
+        livro.setGenero(GeneroLivro.MISTERIO);
         livro.setTitulo("UFO");
         livro.setDatapublicacao(LocalDate.of(1980,02,02));
 
         Autor autor = new Autor();
-        autor.setNome("Lucas");
-        autor.setNacionalidade("Brasileiro");
+        autor.setNome("JOELSON");
+        autor.setNacionalidade("Americanbo");
         autor.setDataNascimento(LocalDate.of(2000, 2,25));
 
 
@@ -98,8 +100,44 @@ class LivroRepositoryTest {
         lista.forEach(System.out::println);
     }
 
+    @Test
+    void listarLivrosComQueryTest(){
+        var resultado = livroRepository.listarTodosOrdenadosPorTitulo();
+        resultado.forEach(System.out::println);
 
+    }
 
+    @Test
+    @Transactional
+    void listarAutoresDosLivrosComQueryTest() {
+        var resultado = livroRepository.listarAutoresDosLivros();
+        resultado.forEach(System.out::println);
+
+    }
+
+    @Test
+    void listarPorGenereoQueryParamTest(){
+        var resultado = livroRepository.findByGenero(GeneroLivro.FICCAO);
+        resultado.forEach(System.out::println);
+
+    }
+
+    @Test
+    void listarPorGenereoPositionalParamTest(){
+        var resultado = livroRepository.findByGeneroPositionalParameters(GeneroLivro.FICCAO);
+        resultado.forEach(System.out::println);
+
+    }
+
+    @Test
+    void deletePorGenereoTest(){
+        livroRepository.deleteByGenero(GeneroLivro.FICCAO);
+    }
+
+    @Test
+    void updateDataPublicacaoLivroTest(){
+        livroRepository.updateByDatapublicacao(LocalDate.of(2000,01,01));
+    }
 
 
 }
