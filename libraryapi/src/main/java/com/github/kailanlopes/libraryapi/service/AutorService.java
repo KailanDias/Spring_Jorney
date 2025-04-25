@@ -17,8 +17,11 @@ public class AutorService {
         this.autorRepository = autorRepository;
     }
 
-    public Autor salvar(Autor autor){
-        return autorRepository.save(autor);
+    public void atualizar(Autor autor){
+        if (autor.getId() == null){
+            throw new IllegalArgumentException("Para atualizar é nescessario que o autor ja esteja na base");
+        }
+        autorRepository.save(autor);
     }
 
     public Optional<Autor> obterPorId(UUID id){

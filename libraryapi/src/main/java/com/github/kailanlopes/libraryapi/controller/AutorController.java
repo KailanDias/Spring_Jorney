@@ -27,7 +27,7 @@ public class AutorController {
     @PostMapping
     public ResponseEntity<Void> salvar(@RequestBody  AutorDTO autor) {
         Autor autorEntidade = autor.mapearParaAutor();
-        autorService.salvar(autorEntidade);
+        autorService.atualizar(autorEntidade);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autorEntidade.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
@@ -61,6 +61,23 @@ public class AutorController {
         List<Autor> resultadoPesquisa = autorService.pesquisar(nome, nacionalidade);
         List<AutorDTO> lista = resultadoPesquisa.stream().map(autor -> new AutorDTO(autor.getId(),autor.getNome(),autor.getDataNascimento(),autor.getNacionalidade())).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto) {
+        var idAutor = UUID.fromString(id); // Transforma o id do autor em UUID
+
+        Optional<Autor> autorOptional= autorService.obterPorId(idAutor);
+        if (autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        var autor = autorOptional.get();
+        autor.setNome(dto.nome());
+        autor.setNacionalidade(dto.nacionalidade());
+        autor.setDataNascimento(dto.dataNascimento());
+
+        autorService.atualizar(autor);
+        return ResponseEntity.noContent().build();
     }
 
 
