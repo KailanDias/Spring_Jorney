@@ -1,6 +1,8 @@
 package com.github.kailanlopes.libraryapi.controller;
 
 import com.github.kailanlopes.libraryapi.controller.dto.AutorDTO;
+import com.github.kailanlopes.libraryapi.controller.dto.ErroResposta;
+import com.github.kailanlopes.libraryapi.exceptions.RegistroDuplicadoException;
 import com.github.kailanlopes.libraryapi.model.Autor;
 import com.github.kailanlopes.libraryapi.service.AutorService;
 import org.springframework.http.HttpStatus;
@@ -25,11 +27,23 @@ public class AutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody  AutorDTO autor) {
-        Autor autorEntidade = autor.mapearParaAutor();
-        autorService.atualizar(autorEntidade);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autorEntidade.getId()).toUri();
-        return ResponseEntity.created(location).build();
+    public ResponseEntity<Object> salvar(@RequestBody  AutorDTO autor) {
+        try {
+            Autor autorEntidade = autor.mapearParaAutor();
+            autorService.salvar(autorEntidade);
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(autorEntidade.getId())
+                    .toUri();
+
+
+            return ResponseEntity.created(location).build();
+        } catch (RegistroDuplicadoException e) {
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
+
     }
 
     @GetMapping("{id}")
@@ -64,7 +78,7 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto) {
+    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto) {
         var idAutor = UUID.fromString(id); // Transforma o id do autor em UUID
 
         Optional<Autor> autorOptional= autorService.obterPorId(idAutor);

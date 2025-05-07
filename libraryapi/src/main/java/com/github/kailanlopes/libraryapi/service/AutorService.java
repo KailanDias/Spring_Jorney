@@ -2,6 +2,7 @@ package com.github.kailanlopes.libraryapi.service;
 
 import com.github.kailanlopes.libraryapi.model.Autor;
 import com.github.kailanlopes.libraryapi.repository.AutorRepository;
+import com.github.kailanlopes.libraryapi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,16 +12,25 @@ import java.util.UUID;
 @Service
 public class AutorService {
 
-    private AutorRepository autorRepository;
+    private final AutorRepository autorRepository;
 
-    public AutorService (AutorRepository autorRepository){
+    private final AutorValidator autorValidator;
+
+    public AutorService (AutorRepository autorRepository, AutorValidator autorValidator) {
         this.autorRepository = autorRepository;
+        this.autorValidator = autorValidator;
+    }
+
+    public Autor salvar(Autor autor) {
+        autorValidator.validar(autor);
+        return autorRepository.save(autor);
     }
 
     public void atualizar(Autor autor){
         if (autor.getId() == null){
             throw new IllegalArgumentException("Para atualizar é nescessario que o autor ja esteja na base");
         }
+        autorValidator.validar(autor);
         autorRepository.save(autor);
     }
 
